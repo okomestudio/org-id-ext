@@ -28,7 +28,7 @@
 ;; This extension adds custom methods for ID generation. Currently, only the
 ;; following method is added:
 ;;
-;;   - ts-b62: Unix timestamp in base-62 encoding
+;;   - ts-b62: Unix timestamp in milliseconds in base-62 encoding
 ;;
 ;;; Code:
 
