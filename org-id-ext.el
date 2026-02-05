@@ -4,7 +4,7 @@
 ;;
 ;; Author: Taro Sato <okomestudio@gmail.com>
 ;; URL: https://github.com/okomestudio/org-id-ext
-;; Version: 0.1.1
+;; Version: 0.2.1
 ;; Keywords: org, convenience
 ;; Package-Requires: ((emacs "30.1"))
 ;;
@@ -70,6 +70,28 @@ or negative."
             result)
       (setq n (/ n 62)))
     (apply #'string result)))
+
+(defun org-id-ext-base62-to-int (s)
+  "Convert base-62 string S to integer."
+  (let ((result 0))
+    (dotimes (i (length s))
+      (let* ((c (aref s i))
+             (v (cond
+                 ((and (>= c ?0) (<= c ?9)) (- c ?0))
+                 ((and (>= c ?A) (<= c ?Z)) (+ 10 (- c ?A)))
+                 ((and (>= c ?a) (<= c ?z)) (+ 36 (- c ?a)))
+                 (t (error "Invalid base62 character: %c" c)))))
+        (setq result (+ (* result 62) v))))
+    result))
+
+(defun org-id-ext-ts-b62-to-time (id)
+  "Convert `ts-b62' ID to Emacs time.
+The prefix in ID is removed, if it exists."
+  (let* ((unique (if (string-match "^[^:]*:\\(.*\\)$" id)
+                     (match-string 1 id)
+                   id))
+         (ts-ms (org-id-ext-base62-to-int unique)))
+    (seconds-to-time (/ ts-ms 1000.0))))
 
 (provide 'org-id-ext)
 ;;; org-id-ext.el ends here
