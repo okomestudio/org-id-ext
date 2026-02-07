@@ -4,7 +4,7 @@
 ;;
 ;; Author: Taro Sato <okomestudio@gmail.com>
 ;; URL: https://github.com/okomestudio/org-id-ext
-;; Version: 0.2.1
+;; Version: 0.2.2
 ;; Keywords: org, convenience
 ;; Package-Requires: ((emacs "30.1"))
 ;;
@@ -92,6 +92,16 @@ The prefix in ID is removed, if it exists."
                    id))
          (ts-ms (org-id-ext-base62-to-int unique)))
     (seconds-to-time (/ ts-ms 1000.0))))
+
+(defun org-id-ext-ts-b62-p (id)
+  "Return non-nil if ID conforms to `ts-b62' format."
+  (and (stringp id)
+       (string-match-p
+        (rx bos
+            (optional (+ (not (any ":"))) ":")
+            (+ (any "0-9a-zA-Z"))
+            eos)
+        id)))
 
 (provide 'org-id-ext)
 ;;; org-id-ext.el ends here
