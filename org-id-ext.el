@@ -4,7 +4,7 @@
 ;;
 ;; Author: Taro Sato <okomestudio@gmail.com>
 ;; URL: https://github.com/okomestudio/org-id-ext
-;; Version: 0.2.2
+;; Version: 0.2.3
 ;; Keywords: org, convenience
 ;; Package-Requires: ((emacs "30.1"))
 ;;
@@ -29,6 +29,34 @@
 ;; following method is added:
 ;;
 ;;   - ts-b62: Unix timestamp in milliseconds in base-62 encoding
+;;
+;; The `ts-b62' method intends to encode timestamp in base-62 (i.e., using
+;; '0-9a-zA-Z') so that the ID length is limited to about 8 to 9 characters.
+;;
+;; After loading the package,
+;;
+;;   (require 'org-id-ext)
+;;
+;; The function `org-id-new' will understand `ts-b62' as an option for
+;; `org-id-method'. To use the `ts-b62' ID generation method, have a line like
+;;
+;;   (setopt org-id-method 'ts-b62)
+;;
+;; before running the function `org-id-new' or `org-id-get-create'.
+;;
+;; For example:
+;;
+;;   (let ((org-id-method 'ts-b62))
+;;     (mapconcat (lambda (_)
+;;                  (prog1
+;;                     (org-id-new)
+;;                    (sleep-for 0.001)))
+;;                (make-list 5 "")
+;;                " "))
+;;
+;; which generates IDs like
+;;
+;;   VDnFbim VDnFbin VDnFbip VDnFbiq VDnFbir
 ;;
 ;;; Code:
 

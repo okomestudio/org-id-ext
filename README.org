@@ -1,3 +1,38 @@
 #+title:  org-id-ext
 
-An org-id extension for Org mode.
+An ~org-id~ extension for Org mode.
+
+This extension adds custom methods for ID generation. Currently, only the following method is added:
+
+  - ~ts-b62~: Unix timestamp in milliseconds in base-62 encoding
+
+The ~ts-b62~ method intends to encode timestamp in base-62 (i.e., using ~0-9a-zA-Z~) so that the ID length is limited to about 7 to 8 characters.
+
+After loading the package,
+
+#+begin_src elisp
+  (require 'org-id-ext)
+#+end_src
+
+The function ~org-id-new~ will understand ~ts-b62~ as an option for ~org-id-method~. To use the ~ts-b62~ ID generation method, have a line like
+
+#+begin_src elisp
+    (setopt org-id-method 'ts-b62)
+#+end_src
+
+before running the function ~org-id-new~ or ~org-id-get-create~.
+
+For example:
+
+#+begin_src elisp
+  (let ((org-id-method 'ts-b62))
+    (mapconcat (lambda (_)
+                 (prog1
+                     (org-id-new)
+                   (sleep-for 0.001)))
+               (make-list 5 "")
+               " "))
+#+end_src
+
+#+RESULTS:
+: VDnFbim VDnFbin VDnFbip VDnFbiq VDnFbir
